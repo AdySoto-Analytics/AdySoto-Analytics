@@ -9,7 +9,7 @@ E-Commerce Conversion Funnel and Customer Retention Analysis
 
 Analyzed raw website activity logs to measure customer conversion and repeat-purchase behavior. Built a three-stage conversion funnel, prepared acquisition cohorts, and calculated monthly retention rates using Google Sheets.
 
-https://docs.google.com/spreadsheets/d/1bmhr4IGUzAr3PbWkQtJZLq-msx3rLTdmxWBTP8KA7pM/edit?usp=sharing
+https://github.com/AdySoto-Analytics/ecommerce-business-analytics.git
 
 Manhattan Vacation Rental Market Analysis
 
