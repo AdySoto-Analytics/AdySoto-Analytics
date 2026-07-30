@@ -5,6 +5,7 @@ Business Intelligence professional with experience transforming complex datasets
 My background combines professional analytics experience with graduate-level software engineering education and hands-on training in SQL, Excel, Google Sheets, Power BI, Tableau, Power Query, Access, and Alteryx.
 
 Featured Projects
+
 E-Commerce Conversion Funnel and Customer Retention Analysis
 
 Analyzed raw website activity logs to measure customer conversion and repeat-purchase behavior. Built a three-stage conversion funnel, prepared acquisition cohorts, and calculated monthly retention rates using Google Sheets.
