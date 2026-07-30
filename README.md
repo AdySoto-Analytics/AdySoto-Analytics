@@ -1,4 +1,4 @@
-Ady | Business Intelligence & Data Analyst
+Ady Soto| Business Intelligence & Data Analyst
 
 Business Intelligence professional with experience transforming complex datasets into dashboards, performance metrics, and actionable business recommendations.
 
