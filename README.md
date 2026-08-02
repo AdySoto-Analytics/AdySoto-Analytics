@@ -12,11 +12,13 @@ Analyzed raw website activity logs to measure customer conversion and repeat-pur
 
 https://github.com/AdySoto-Analytics/ecommerce-business-analytics.git
 
-Manhattan Vacation Rental Market Analysis
+Saving Super Store: Profitability, Advertising & Returns Analysis
 
-Evaluated Manhattan Airbnb listings to identify attractive neighborhoods, bedroom configurations, and potential revenue opportunities.
+Developed an interactive Tableau analysis to evaluate retail profitability, identify loss-generating products, recommend advertising opportunities, and investigate product and customer return behavior. This project demonstrates data storytelling, profitability analysis, calculated fields, dashboard development, and executive-level business recommendations.
 
-Project link coming soon.
+**Tools:** Tableau • Data Visualization • Calculated Fields • LEFT JOIN • Business Intelligence
+
+https://github.com/AdySoto-Analytics/saving-superstore-tableau-analysis
 
 Venture Capital and Startup Investment Analysis
 
