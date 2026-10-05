@@ -25,7 +25,7 @@ Status key: ⬜ Not started · 🟨 In discussion · ✅ Agreed
 | Part | Topic | Status | Notes / key takeaways |
 |------|-------|--------|-----------------------|
 | 1 | Goals | ✅ | Three goals above; ambiguity-handling rule agreed. |
-| 2 | Background | ⬜ | |
+| 2 | Background | 🟨 | Healthcare staffing marketplace; Net Revenue = charge rate − pay rate on worked shifts. AEs paid on New Customer NR (limited window after account starts producing); AMs on Existing Customer NR afterwards; managers/directors on roll-up quotas. Comp month **June 2026**; statements already sent and questioned; rebuilding from scratch. Open questions Q1–Q8. |
 | 3 | The Assignment | ⬜ | |
 | 4 | Deliverables | ⬜ | |
 | 5 | What the company is looking for | ⬜ | |
@@ -43,6 +43,22 @@ Status key: ⬜ Not started · 🟨 In discussion · ✅ Agreed
 | 4 | Incentive-effectiveness analysis | ⬜ |
 | 5 | High-stakes conversation preparation | ⬜ |
 | 6 | Final deliverables & presentation | ⬜ |
+
+## Open questions (to verify against later parts)
+
+Questions raised while reading the requirements. If a later part answers one, we close it.
+If it stays unclear, it moves to the ambiguity log with a recommended treatment.
+
+| ID | Raised in | Question | Expected answer in | Status |
+|----|-----------|----------|--------------------|--------|
+| Q1 | Part 2 | Is Net Revenue calculated per shift, per hour, or per billed line? How are cancelled, no-show, partially worked, or adjusted/credited shifts treated? | Part 7, Appendix | Open |
+| Q2 | Part 2 | What event marks an account as having "started producing" (first posted, claimed, worked, or billed shift)? | Part 7 | Open |
+| Q3 | Part 2 | How long is the AE credit window, and how are partial months at its start and end handled? | Part 7 | Open |
+| Q4 | Part 2 | When does the AM take over: at the start of production, or when the AE window ends? Can both be credited at once, or can neither be? | Part 7 | Open |
+| Q5 | Part 2 | Which date assigns revenue to June: shift date, invoice date, or payment date? How are late-arriving adjustments to earlier months handled? | Part 7, Part 6 | Open |
+| Q6 | Part 2 | How do roll-up quotas handle mid-month hires, departures, transfers, and open territories? | Part 7, Part 6 | Open |
+| Q7 | Part 2 | Do we have the June statements already sent (and the old spreadsheet), so we can reconcile our numbers against what was paid? | Part 6 | Open |
+| Q8 | Part 2 | When our June numbers differ from what was paid, what is the policy for correcting it (true-up next cycle, off-cycle payment, recovering an overpayment)? | Part 7, Part 8 | Open |
 
 ## Ambiguity log
 
