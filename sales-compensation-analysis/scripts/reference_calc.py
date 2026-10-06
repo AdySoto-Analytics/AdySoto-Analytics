@@ -20,7 +20,8 @@ HALF = 0.5
 
 def build(d=None, *, gtm_exclude=(), accel_smb=(1.2, 1.3), go_live="earliest_cw",
           stage_rule="stage", role_start_override=None, ramp_status="any_day",
-          catch_up_gtm=True, negative_am="floor0"):
+          catch_up_gtm=True, negative_am="floor0", gtm_worked_only=(),
+          ignore_employment=False, deduct_denied=False):
     d = d or load()
     r, h, fx = d["1. Sales Roster"], d["2. HR Export"], d["3. Exchange Rates"]
     comp, acc = d["5. Compensation"], d["6. Accelerators"]
@@ -43,6 +44,9 @@ def build(d=None, *, gtm_exclude=(), accel_smb=(1.2, 1.3), go_live="earliest_cw"
 
     def employed(row, dt):
         return (row.emp_start <= dt) and (pd.isna(row.emp_end) or dt <= row.emp_end)
+
+    def employed_credit(row, dt):  # credit recognition test (7.11); the naive variant skips it
+        return True if ignore_employment else employed(row, dt)
 
     p["days_employed"] = p.apply(lambda row: sum(employed(row, dt) for dt in days), axis=1)
     p["quota_prorated"] = p.quota * p.days_employed / DAYS_IN_MONTH
@@ -94,7 +98,7 @@ def build(d=None, *, gtm_exclude=(), accel_smb=(1.2, 1.3), go_live="earliest_cw"
     s = a.merge(acct, on="app_account_id")
     s["F"] = s.account_first_worked_shift_date
     s["nr"] = s.nr_per_shift.where(s.worked_shift, 0.0)
-    s["gsv"] = s.charge_rate_per_shift
+    s["gsv"] = s.charge_rate_per_shift.where(~s.crm_account_id.isin(gtm_worked_only) | s.worked_shift, 0.0)
     s["wdate"] = s.shift_worked_date
     s["pdate"] = s.shift_posted_date
 
@@ -159,7 +163,7 @@ def build(d=None, *, gtm_exclude=(), accel_smb=(1.2, 1.3), go_live="earliest_cw"
             dts, vals = dt[j], val[j]
         if closer_row is None:
             return 0.0, vals.sum()
-        ok = dts.apply(lambda x: employed(closer_row, x))
+        ok = dts.apply(lambda x: employed_credit(closer_row, x))
         return vals[ok].sum(), vals[~ok].sum()
 
     out = []
@@ -172,7 +176,7 @@ def build(d=None, *, gtm_exclude=(), accel_smb=(1.2, 1.3), go_live="earliest_cw"
         if row.component == "F1-30D":
             cred, uncred = f130_split(row.crm_account_id, cr_row)
         else:
-            if cr_row is not None and employed(cr_row, row.rec_date):
+            if cr_row is not None and employed_credit(cr_row, row.rec_date):
                 cred, uncred = row.raw, 0.0
             else:
                 cred, uncred = 0.0, row.raw
@@ -183,7 +187,7 @@ def build(d=None, *, gtm_exclude=(), accel_smb=(1.2, 1.3), go_live="earliest_cw"
     existing = acct[acct.go_live < MONTH_START].crm_account_id
     sj = s[s.crm_account_id.isin(existing) & s.wdate.between(MONTH_START, MONTH_END)]
     am_nr = sj.groupby("crm_owner_id").nr.sum()
-    bb = b[(b.ticket_status == "approved")].merge(acct[["billing_account_id", "crm_account_id", "crm_owner_id", "go_live"]],
+    bb = b[(b.ticket_status == "approved") | deduct_denied].merge(acct[["billing_account_id", "crm_account_id", "crm_owner_id", "go_live"]],
                                                    on="billing_account_id")
     bj = bb[(bb.billing_month == "2026-06") & (bb.go_live < MONTH_START)]
     am_cr = bj.groupby("crm_owner_id").credit_amount.sum()
