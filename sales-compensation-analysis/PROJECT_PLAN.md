@@ -27,8 +27,8 @@ Status key: ⬜ Not started · 🟨 In discussion · ✅ Agreed
 | 1 | Goals | ✅ | Three goals above; ambiguity-handling rule agreed. |
 | 2 | Background | ✅ | Healthcare staffing marketplace; Net Revenue = charge rate − pay rate on worked shifts. AEs paid on New Customer NR (limited window after account starts producing); AMs on Existing Customer NR afterwards; managers/directors on roll-up quotas. Comp month **June 2026**; statements already sent and questioned; rebuilding from scratch. Open questions Q1–Q8. |
 | 3 | The Assignment | 🟨 | Four tasks: **3.1** June 2026 commissions for all 80 reps (AE, AM, frontline mgr, director, Head of Sales & AM), dynamic and traceable to source rows. **3.2** Data-quality exceptions ledger sized by records, $, reps, and treatment; includes payouts the plan allows but we would not sign off. Hint: one finding outweighs all others combined. **3.3** SMB AE accelerator 1.2x/1.3x → 1.3x/1.5x: paid vs repriced vs delta, with assumptions and surprises. **3.4** Slack scrape: escalate three items, write one response of ≤250 words. Open: A1–A3, Q9. |
-| 4 | Deliverables | 🟨 | **(1) Excel / Google Sheet model:** June 2026 commission for all 80 reps in USD **and local currency**, plus the exceptions ledger and the plan-change scenario. Inputs separate from calculations, built for the VP of Sales to open, no black-box or hardcoded logic, and the organization itself is evaluated. **(2) PDF summary, max 3 pages:** ledger findings ranked by $ impact; every assumption where the plan is silent, with a recommendation; the plan-change answer and surprises; the 3 Slack escalations and one reply. Open: Q10, A4. |
-| 5 | What the company is looking for | ⬜ | |
+| 4 | Deliverables | ✅ | **(1) Excel / Google Sheet model:** June 2026 commission for all 80 reps in USD **and local currency**, plus the exceptions ledger and the plan-change scenario. Inputs separate from calculations, built for the VP of Sales to open, no black-box or hardcoded logic, and the organization itself is evaluated. **(2) PDF summary, max 3 pages:** ledger findings ranked by $ impact; every assumption where the plan is silent, with a recommendation; the plan-change answer and surprises; the 3 Slack escalations and one reply. Open: Q10. |
+| 5 | What the company is looking for | 🟨 | Evaluation criteria: **Reconciliation discipline** (every exception named, sized, root-caused; stacked problems on one rep untangled). **Modeling craft** (consistent formulas, parameterised inputs; a teammate can rerun July or reprice without help). **Communication** (most important first; plain-language insight). **Comprehension** (strengths and weaknesses of the current plan; ability to own future plans). Open: A5. |
 | 6 | Data files | ⬜ | |
 | 7 | Compensation plan | ⬜ | |
 | 8 | Logistics | ⬜ | |
@@ -70,7 +70,8 @@ If it stays unclear, it moves to the ambiguity log with a recommended treatment.
 | A1 | Part 3 (3.1 vs 3.2) | 3.1 says to apply the plan "exactly as written", but 3.2 asks us to flag what the plan would pay that we would not sign off. Which number is the June payout? | (a) Plan as written only. (b) Recommended number only. (c) Both, side by side. $ impact to be sized. | **(c)** Data errors get corrected in the calculation, because they are not the plan. Policy concerns are kept as a separate, visible hold/adjustment layer, so the plan-as-written figure and the sign-off figure can both be traced. | ✅ Approved as recommended (2026-10-05) | Decided |
 | A2 | Part 3 (3.2) | "Dollars moved" needs a baseline. | (a) Versus a naive calculation on the raw data. (b) Versus the June statements already paid. | **(a)** as the primary sizing, because it is reproducible. Add (b) where the paid statements exist. | ✅ Approved as recommended (2026-10-05) | Decided |
 | A3 | Part 3 (3.3) | "June as actually paid" could mean the statements that went out, or our corrected June. | (a) Statements as issued. (b) Our corrected calculation. | **(b)** as the baseline for repricing, because the issued statements may contain errors that would distort the delta. Show (a) alongside if the data exists. | ✅ Approved as recommended (2026-10-05) | Decided |
-| A4 | Part 4 | Excel or Google Sheet? | (a) Excel .xlsx with live formulas, which also opens in Google Sheets. (b) A native Google Sheet. | **(a)**: I can build and verify it here and it works in both tools; you can import it into Google Drive if you prefer. | Pending | Proposed |
+| A4 | Part 4 | Excel or Google Sheet? | (a) Excel .xlsx with live formulas, which also opens in Google Sheets. (b) A native Google Sheet. | **(a)**: I can build and verify it here and it works in both tools; you can import it into Google Drive if you prefer. | ✅ Approved: Excel (2026-10-06) | Decided |
+| A5 | Part 5 | When two or more problems stack on one rep, how is each one's $ impact sized? Sizing them one at a time can double-count or miss interaction effects (e.g. two fixes that each push a rep across an accelerator tier). | (a) Standalone: each fix alone vs naive. (b) Sequential waterfall in a fixed order. (c) Both. | **(c)**: the ledger uses a sequential waterfall in a stated order, so the steps add up exactly to the final change; the per-rep view also shows each fix's standalone impact and the interaction difference. | Pending | Proposed |
 
 ## Proposed model structure (Part 4)
 
@@ -82,9 +83,18 @@ If it stays unclear, it moves to the ambiguity log with a recommended treatment.
 | Outputs | `Summary` (80 reps, USD + local, as-written vs recommended); `Exceptions_Ledger`; `Scenario_Accelerator` | Scenario driven by a parameter switch, not a copied model |
 | Checks | `Reconciliation`: totals tie to source, row counts, every rep present once | All checks must show PASS before sign-off |
 
+## Design implications from Part 5
+
+- **Ledger columns:** ID · finding · root cause · records touched (source row IDs) · reps affected · $ naive → $ treated → $ moved · treatment and why · category (data error / plan-as-written but not signed off) · decision owner.
+- **Stacked issues:** a per-rep waterfall (naive → fix 1 → fix 2 → … → final), using the A5 sizing method.
+- **Rerun July:** the comp month is a single input; credit windows, FX and quotas are all looked up from it, with no dates inside formulas. The README includes a step-by-step "run next month" runbook.
+- **Communication:** every output tab and the PDF start with the headline number and the top finding, then the detail.
+- **Comprehension:** a `Plan_Observations` tab (strengths, weaknesses, incentive risks such as behaviours the plan rewards, cliffs, gaps or overlaps at handoffs, roll-up effects) with recommended plan changes. The best points go into the PDF.
+
 ## Decision log
 
 | Date | Decision | Rationale |
 |------|----------|-----------|
+| 2026-10-06 | Deliverable built as Excel .xlsx with live formulas (A4) | Can be built and verified here; also opens in Google Sheets |
 | 2026-10-05 | A1–A3 approved as recommended | See ambiguity log |
 | 2026-10-05 | Project lives in `sales-compensation-analysis/` within this repo | Synthetic data, safe to store; keeps portfolio README untouched |
