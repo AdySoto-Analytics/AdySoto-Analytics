@@ -32,13 +32,13 @@ Status key: ⬜ Not started · 🟨 In discussion · ✅ Agreed
 | 6 | Data files | ✅ | One workbook, **11 tabs** (known so far: tab 1 Sales Roster, tab 11 Slack Scrape). **All amounts are USD**: every facility bills in USD, so the revenue side never converts. Currency enters **only at payout**. The data deliberately contains more than needed, so we document which tabs we use and why. Appendix A explains what the tabs can't. Workbook arrives after Parts 7, 8 and the Appendix are reviewed. |
 | 7 | Compensation plan | ✅ | Complete rule set = Section 07 + tabs 3 (FX), 4 (Ramp Terms), 5 (Compensation), 6 (Accelerators). Digest in `PLAN_RULES.md`. Answers Q1–Q5 and most of Q6/Q10. A6–A12 decided; A13 open until data; data watch list W1–W10; draft plan observations P1–P8. |
 | 8 | Logistics | ✅ | Submit the model and the written summary **only** via the link in Ady's email; other formats or channels are not reviewed. → Final files: one `.xlsx` (no macros, cached values recalculated so it previews correctly) and one `.pdf` of ≤3 pages. Ady submits; I prepare the files. Q8 not answered → A14. |
-| App. | Data dictionary | 🟨 | Defines the 11 tabs and how they join (see data inventory). Key rules: HR governs role, dates and manager line; the HR snapshot's Manager-ID held all month; the Head's Manager-ID has no row (expected); closed_by = AE, crm_owner = AM; segment doesn't decide the plan; the first worked shift is given, not derived; the shift extract covers Mar–Jun 2026 only; credits are USD and all approved types count. A13 and Q7 closed; A15–A16 proposed; W11–W18 added. |
+| App. | Data dictionary | ✅ | Defines the 11 tabs and how they join (see data inventory). Key rules: HR governs role, dates and manager line; the HR snapshot's Manager-ID held all month; the Head's Manager-ID has no row (expected); closed_by = AE, crm_owner = AM; segment doesn't decide the plan; the first worked shift is given, not derived; the shift extract covers Mar–Jun 2026 only; credits are USD and all approved types count. A13 and Q7 closed; A15–A16 decided; W11–W18 added. |
 
 ## Later phases (refined once Phase 1 is agreed)
 
 | Phase | Description | Status |
 |-------|-------------|--------|
-| 2 | Data profiling & quality checks (feeds 3.2 ledger) | ⬜ |
+| 2 | Data profiling & quality checks (feeds 3.2 ledger) | 🟨 Waiting for workbook upload |
 | 3 | Commission calculation, all 80 reps (3.1) | ⬜ |
 | 4 | Exceptions ledger, sized and treated (3.2) | ⬜ |
 | 5 | Plan-change model: SMB AE accelerator (3.3) | ⬜ |
@@ -81,8 +81,8 @@ If it stays unclear, it moves to the ambiguity log with a recommended treatment.
 | A12 | 7.13 | Rounding: when do we round to cents? | (a) Full precision throughout; round USD to cents per rep; convert; round local to the currency's minor unit. (b) Round at every step. | **(a)**: rounding once avoids pennies piling up across bands and windows; state it in the README. | ✅ Approved as recommended (2026-10-06) | Decided |
 | A13 | 7.7, 7.8, A-2, A-8 | `crm_owner_id` and the Manager chain are snapshots from the export. | (a) Use the export as is. (b) Rebuild June ownership from history. | **Resolved by the Appendix:** A-2 says the Manager-ID shown held for the whole month and there is no manager history; A-8 gives only the current owner, with no ownership history to rebuild from. Use (a). Ledger any contrary evidence (e.g. Slack) without changing the calculation. | Resolved by Appendix | Closed |
 | A14 | Part 2, 7.14 | June statements have already been paid. When our recalculation differs, how is the difference settled? The plan is silent. | (a) Underpayments: pay on the July statement or off-cycle. (b) Overpayments: deduct automatically from July. (c) Overpayments: hold for a written leadership decision. | **(a) + (c)**: pay underpayments promptly (off-cycle if material). Overpayments go to sales leadership for a written decision (recover, spread, or forgive), never deducted automatically, consistent with 7.14. State this in the PDF. | ✅ Approved as recommended (2026-10-06) | Decided |
-| A15 | A-9, 7.4 | `account_first_worked_shift_date` is given and we must not infer it. What if it conflicts with the data (different values on rows of the same account, or a worked shift in the extract dated before it)? | (a) Use the field as given; if an account has several values, use the earliest. (b) Override it with the observed first worked shift. | **(a)**: the dictionary explicitly says not to infer it. Each conflict goes in the ledger with the $ it would move under (b). | Pending | Proposed |
-| A16 | A-1, A-2 | The Sales Roster (tab 1) and the HR Export (tab 2) may disagree on role, manager, dates or status. | (a) HR governs role, dates and Manager-ID; the roster defines the 80 in scope and the CRM id. (b) The roster governs. | **(a)**: A-2 says Current Role 'decides which plan the rep is paid on', and the roster 'is not guaranteed to agree with HR'. Ledger every disagreement with its $ effect. | Pending | Proposed |
+| A15 | A-9, 7.4 | `account_first_worked_shift_date` is given and we must not infer it. What if it conflicts with the data (different values on rows of the same account, or a worked shift in the extract dated before it)? | (a) Use the field as given; if an account has several values, use the earliest. (b) Override it with the observed first worked shift. | **(a)**: the dictionary explicitly says not to infer it. Each conflict goes in the ledger with the $ it would move under (b). | ✅ Approved as recommended (2026-10-06) | Decided |
+| A16 | A-1, A-2 | The Sales Roster (tab 1) and the HR Export (tab 2) may disagree on role, manager, dates or status. | (a) HR governs role, dates and Manager-ID; the roster defines the 80 in scope and the CRM id. (b) The roster governs. | **(a)**: A-2 says Current Role 'decides which plan the rep is paid on', and the roster 'is not guaranteed to agree with HR'. Ledger every disagreement with its $ effect. | ✅ Approved as recommended (2026-10-06) | Decided |
 
 ## Proposed model structure (Part 4)
 
@@ -165,6 +165,7 @@ If it stays unclear, it moves to the ambiguity log with a recommended treatment.
 
 | Date | Decision | Rationale |
 |------|----------|-----------|
+| 2026-10-06 | A15–A16 approved; Phase 1 (requirements review) complete | All 8 parts + Appendix reviewed |
 | 2026-10-06 | A14 approved; A13 closed by Appendix (no ownership or manager history exists) | See ambiguity log |
 | 2026-10-06 | A6–A12 approved as recommended | See ambiguity log |
 | 2026-10-06 | A5 approved: sequential waterfall + standalone impact | See ambiguity log |
