@@ -32,7 +32,7 @@ Status key: ⬜ Not started · 🟨 In discussion · ✅ Agreed
 | 6 | Data files | ✅ | One workbook, **11 tabs** (known so far: tab 1 Sales Roster, tab 11 Slack Scrape). **All amounts are USD**: every facility bills in USD, so the revenue side never converts. Currency enters **only at payout**. The data deliberately contains more than needed, so we document which tabs we use and why. Appendix A explains what the tabs can't. Workbook arrives after Parts 7, 8 and the Appendix are reviewed. |
 | 7 | Compensation plan | ✅ | Complete rule set = Section 07 + tabs 3 (FX), 4 (Ramp Terms), 5 (Compensation), 6 (Accelerators). Digest in `PLAN_RULES.md`. Answers Q1–Q5 and most of Q6/Q10. A6–A12 decided; A13 open until data; data watch list W1–W10; draft plan observations P1–P8. |
 | 8 | Logistics | ✅ | Submit the model and the written summary **only** via the link in Ady's email; other formats or channels are not reviewed. → Final files: one `.xlsx` (no macros, cached values recalculated so it previews correctly) and one `.pdf` of ≤3 pages. Ady submits; I prepare the files. Q8 not answered → A14. |
-| App. | Data dictionary | ⬜ | |
+| App. | Data dictionary | 🟨 | Defines the 11 tabs and how they join (see data inventory). Key rules: HR governs role, dates and manager line; the HR snapshot's Manager-ID held all month; the Head's Manager-ID has no row (expected); closed_by = AE, crm_owner = AM; segment doesn't decide the plan; the first worked shift is given, not derived; the shift extract covers Mar–Jun 2026 only; credits are USD and all approved types count. A13 and Q7 closed; A15–A16 proposed; W11–W18 added. |
 
 ## Later phases (refined once Phase 1 is agreed)
 
@@ -58,7 +58,7 @@ If it stays unclear, it moves to the ambiguity log with a recommended treatment.
 | Q4 | Part 2 | When does the AM take over: at the start of production, or when the AE window ends? Can both be credited at once, or can neither be? | Part 7 | Answered (7.4, 7.7): no clean handoff. Once go-live is before the month, the AM is credited, while the AE may still be in their windows → **overlap by design** (see P1). |
 | Q5 | Part 2 | Which date assigns revenue to June: shift date, invoice date, or payment date? How are late-arriving adjustments to earlier months handled? | Part 7, Part 6 | Answered (7.1, 7.2, 7.4): NR by date worked; GSV by date posted; credits by billing_month; F31-60D/F61-90D in the month the window closes. Nothing already paid is restated. |
 | Q6 | Part 2 | How do roll-up quotas handle mid-month hires, departures, transfers, and open territories? | Part 7, Part 6 | Answered in part (7.8, 7.11): whole Manager chain; quota from tab 5; leavers' revenue still rolls up. Mid-month transfers → A13. |
-| Q7 | Part 2 | Do we have the June statements already sent (and the old spreadsheet), so we can reconcile our numbers against what was paid? | Part 6 | Open |
+| Q7 | Part 2 | Do we have the June statements already sent (and the old spreadsheet), so we can reconcile our numbers against what was paid? | Part 6 | Answered (Appendix): no tab holds the June statements or the old spreadsheet. The only evidence of what was paid is in the Slack scrape. A2/A3 sizing is therefore vs a naive calculation only. |
 | Q8 | Part 2 | When our June numbers differ from what was paid, what is the policy for correcting it (true-up next cycle, off-cycle payment, recovering an overpayment)? | Part 7, Part 8 | Not answered by the plan or logistics → moved to A14. |
 | Q9 | Part 3 | What tool must the dynamic model use (Excel, Google Sheets, SQL, Python)? Is a single workbook expected? | Part 4, Part 8 | Answered (Part 4): a single Excel/Google Sheet model with live formulas. See A4. |
 | Q10 | Part 4 | Which FX rate converts USD commission to local currency (June average, month-end, or payment date), and where does it come from? Do we round the USD commission first and then convert, or convert unrounded and round in local currency? *Part 6 narrowed this: conversion happens once, at payout only.* | Part 7, Appendix | Answered in part (7.13): tab 3 rate, local units per USD, multiply. Rounding order → A12. |
@@ -79,8 +79,10 @@ If it stays unclear, it moves to the ambiguity log with a recommended treatment.
 | A10 | 7.9, 7.10, 7.12 | A rep whose ramp **ends partway through June**: are they "ramping" for June (no accelerators, no SPIFF)? | (a) Ramping if any June day is in a ramp month. (b) Ramping only if the floor actually binds. (c) Split the month by day. | **(a)**: the plan treats ramp as a status; a one-day test is objective and repeatable. Show the $ difference vs (b) for affected reps. | ✅ Approved as recommended (2026-10-06) | Decided |
 | A11 | 7.11 | A rep who **changed role in June**: which role's rate, bands, quota and rollup line apply? | (a) Roster role at month end, for the whole month. (b) Split credit by date across both roles. | **(a)**: 7.11 says quota does not prorate for a role change, which implies one role per month. Flag each case and show the $ under (b). | ✅ Approved as recommended (2026-10-06) | Decided |
 | A12 | 7.13 | Rounding: when do we round to cents? | (a) Full precision throughout; round USD to cents per rep; convert; round local to the currency's minor unit. (b) Round at every step. | **(a)**: rounding once avoids pennies piling up across bands and windows; state it in the README. | ✅ Approved as recommended (2026-10-06) | Decided |
-| A13 | 7.7, 7.8, 7.11 | `crm_owner_id` and the Manager chain are **snapshots from the export**, which may postdate June (July changes). | (a) Use the export as is. (b) Rebuild June ownership from any history in the data. | Decide once the Appendix and data are seen. Default **(a)**, but ledger any evidence of post-June changes. | Pending | Open until data |
-| A14 | Part 2, 7.14 | June statements have already been paid. When our recalculation differs, how is the difference settled? The plan is silent. | (a) Underpayments: pay on the July statement or off-cycle. (b) Overpayments: deduct automatically from July. (c) Overpayments: hold for a written leadership decision. | **(a) + (c)**: pay underpayments promptly (off-cycle if material). Overpayments go to sales leadership for a written decision (recover, spread, or forgive), never deducted automatically, consistent with 7.14. State this in the PDF. | Pending | Proposed |
+| A13 | 7.7, 7.8, A-2, A-8 | `crm_owner_id` and the Manager chain are snapshots from the export. | (a) Use the export as is. (b) Rebuild June ownership from history. | **Resolved by the Appendix:** A-2 says the Manager-ID shown held for the whole month and there is no manager history; A-8 gives only the current owner, with no ownership history to rebuild from. Use (a). Ledger any contrary evidence (e.g. Slack) without changing the calculation. | Resolved by Appendix | Closed |
+| A14 | Part 2, 7.14 | June statements have already been paid. When our recalculation differs, how is the difference settled? The plan is silent. | (a) Underpayments: pay on the July statement or off-cycle. (b) Overpayments: deduct automatically from July. (c) Overpayments: hold for a written leadership decision. | **(a) + (c)**: pay underpayments promptly (off-cycle if material). Overpayments go to sales leadership for a written decision (recover, spread, or forgive), never deducted automatically, consistent with 7.14. State this in the PDF. | ✅ Approved as recommended (2026-10-06) | Decided |
+| A15 | A-9, 7.4 | `account_first_worked_shift_date` is given and we must not infer it. What if it conflicts with the data (different values on rows of the same account, or a worked shift in the extract dated before it)? | (a) Use the field as given; if an account has several values, use the earliest. (b) Override it with the observed first worked shift. | **(a)**: the dictionary explicitly says not to infer it. Each conflict goes in the ledger with the $ it would move under (b). | Pending | Proposed |
+| A16 | A-1, A-2 | The Sales Roster (tab 1) and the HR Export (tab 2) may disagree on role, manager, dates or status. | (a) HR governs role, dates and Manager-ID; the roster defines the 80 in scope and the CRM id. (b) The roster governs. | **(a)**: A-2 says Current Role 'decides which plan the rep is paid on', and the roster 'is not guaranteed to agree with HR'. Ledger every disagreement with its $ effect. | Pending | Proposed |
 
 ## Proposed model structure (Part 4)
 
@@ -128,18 +130,42 @@ If it stays unclear, it moves to the ambiguity log with a recommended treatment.
 | P7 | Window credits wait until the window closes | Pay lags performance by up to 2 months; harder to explain to reps |
 | P8 | Closer keeps credit after leaving ownership | Clear and fair to hunters, but the AE and AM can be credited simultaneously (P1) |
 
-## Data inventory (to fill when the workbook arrives)
+## Data inventory (from Appendix A — confirm when the workbook arrives)
 
-| Tab | Contents | Used? | Why / how | Known issues |
-|-----|----------|-------|-----------|--------------|
-| 1. Sales Roster | 80 reps | Yes | Population for 3.1 | |
-| 2–10 | TBD | | | |
-| 11. Slack Scrape | June to mid-July messages | Yes | Input for 3.4 | |
+| Tab | Rows | Contents | Used for | Watch |
+|-----|------|----------|----------|-------|
+| 1. Sales Roster | 80 | Reps in scope; unique names; `crm_owner_id` | Population for 3.1; links reps to CRM | Disagreements with HR (A16) |
+| 2. HR Export | 1,080 | Role, employment dates (inclusive), role dates, Manager-ID, Country Code | Plan role, quota proration, ramp clock, roll-up chain, payout currency | Join key to roster (W11); chain gaps/loops |
+| 3. Exchange Rates | 196 | Local units per 1 USD | USD → local payout | Country → currency mapping (W12) |
+| 4. Ramp Terms | 17 roles | Start Date Ramp (cols B–D); New Report Ramp (E–G) not used by any role | Ramp floor | Months in B–D vs plan's 2 defined months (W13) |
+| 5. Compensation | 17 roles | Headcount, # of Reports, quota, rates; Metric II for AMs and the Head | Rates, quotas, manager quotas | Headcount vs roster/HR (W14) |
+| 6. Accelerators | — | AE bands and multipliers; AM retention SPIFF | Bands, SPIFF; 3.3 scenario | — |
+| 7. Opportunity to ID Mapping | 761 | CRM ↔ app ↔ billing ids | Joins shifts and credits to accounts | 761 vs 815 opps; duplicates and gaps (W15) |
+| 8. Opportunity Export | 815 | Stage, closed_won_date, effective_start_date, closed_by (AE), crm_owner (AM), rates, terms, segment | Go-live, AE/AM attribution, net terms | W2–W5; segment is informational only |
+| 9. App Export | 107,052 | Posted shifts; `worked_shift`; `shift_worked_date`; `account_first_worked_shift_date`; Applied Science tag | NR, GSV, windows, GTM | Extract window Mar–Jun (W16); flag/date consistency (W17); A15 |
+| 10. Billing Export | 1,089 | Credit tickets (USD), status, billing_month, ticket_type | Existing NR deductions; SPIFF May/June | Statuses other than approved/denied (W18) |
+| 11. Slack Scrape | — | Messages from June to mid-July | 3.4 | Only evidence of what was actually paid |
+
+**Join path:** shift (app id) → tab 7 → account / opportunities (tab 8) → `closed_by_owner_id` / `crm_owner_id` → tab 1 roster → tab 2 HR (role, manager, country) → tab 3 FX. Credits follow the same path via billing id.
+
+### Watch list additions from Appendix A
+
+| ID | What to check | Why it matters |
+|----|---------------|----------------|
+| W11 | The key that joins the roster to HR (an id, or name only?) | A bad join silently mis-assigns role, manager or currency |
+| W12 | How Country Code maps to a tab 3 rate (shared currencies, missing countries) | Wrong local payout |
+| W13 | Whether tab 4 has a 3rd ramp month although 7.10 defines only months 1–2 | Possible plan/tab conflict |
+| W14 | Tab 5 headcount and # of Reports vs the actual roster and HR chain | Manager quota is taken from tab 5, not from actual team size |
+| W15 | Tab 7: ids mapped to more than one account, unmapped ids, many opportunities per account | **Duplicate mapping multiplies revenue**; strong "biggest finding" candidate alongside W6 |
+| W16 | Unworked posted shifts outside Mar–Jun, and GTM postings before 1 March | GSV for F1-30D may be incomplete; data limitation to ledger |
+| W17 | `worked_shift` TRUE without a date, FALSE with a date; first-shift date inconsistent within an account | Revenue on or off by mistake; A15 |
+| W18 | Credit statuses other than approved/denied (e.g. pending); billing_month outside May–June | Only approved credits count; May credits matter for the SPIFF |
 
 ## Decision log
 
 | Date | Decision | Rationale |
 |------|----------|-----------|
+| 2026-10-06 | A14 approved; A13 closed by Appendix (no ownership or manager history exists) | See ambiguity log |
 | 2026-10-06 | A6–A12 approved as recommended | See ambiguity log |
 | 2026-10-06 | A5 approved: sequential waterfall + standalone impact | See ambiguity log |
 | 2026-10-06 | Deliverable built as Excel .xlsx with live formulas (A4) | Can be built and verified here; also opens in Google Sheets |
