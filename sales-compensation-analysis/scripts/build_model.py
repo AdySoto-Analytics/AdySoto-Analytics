@@ -198,7 +198,7 @@ def build():
         (15, "Credit factor for F31-60D and F61-90D", 0.5, PCT, "LATER_FACTOR", "7.4: later windows pay at half, applied to the credit.", True),
         (16, "GTM payout rate (on GSV)", 0.03, PCT, "GTM_RATE", "7.6: GTM dollars pay 3%; converted to credited revenue as GSV x 3% / role rate.", True),
         (17, "Ramp month length (days)", 30, INT, "RAMP_LEN", "7.10: month 1 = days 1-30, month 2 = days 31-60.", True),
-        (18, "Rounding: decimals for payout", 2, INT, "DEC", "A12: full precision throughout; round USD once per rep, convert, round local.", True),
+        (18, "Rounding: decimals for payout", 2, INT, "DEC", "A12: full precision throughout; round USD once per rep (halves away from zero, Excel ROUND), convert, round local.", True),
         (19, "Approved ticket status value", "approved", None, "ST_APPROVED", "7.2: only approved tickets reduce Existing revenue.", True),
         (20, "Closed Won stage value", "Closed Won", None, "ST_WON", "7.3: opportunity_stage governs.", True),
         (21, "GTM account_type value", "GTM", None, "GTM_TYPE", "A17: account_type = GTM is the result of the Applied Science tag.", True),

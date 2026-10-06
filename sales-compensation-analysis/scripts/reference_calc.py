@@ -6,6 +6,7 @@ exposed as keyword arguments so their dollar impact can be sized.
 import sys
 from pathlib import Path
 import pandas as pd
+from decimal import Decimal, ROUND_HALF_UP
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from load import load
@@ -267,10 +268,12 @@ def build(d=None, *, gtm_exclude=(), accel_smb=(1.2, 1.3), go_live="earliest_cw"
     res.loc[head, "commission_rev"] = res.loc[head].apply(lambda x: x.rate * x.carry_new + rate2 * x.carry_ex, axis=1)
     res.loc[head, "credited"] = res.loc[head, "carry_new"]
 
-    res["total_usd"] = (res.commission_rev + res.spiff).round(2)
+    def round_half_up(v, dp=2):  # matches Excel ROUND: halves round away from zero
+        return float(Decimal(repr(v)).quantize(Decimal(1).scaleb(-dp), rounding=ROUND_HALF_UP))
+    res["total_usd"] = (res.commission_rev + res.spiff).apply(round_half_up)
     fxr = fx.set_index("Country Code")["1 USD ="]
     res["fx"] = res["Country Code"].map(fxr)
-    res["total_local"] = (res.total_usd * res.fx).round(2)
+    res["total_local"] = (res.total_usd * res.fx).apply(round_half_up)
     res["attainment"] = res.credited / res.quota_prorated.where(res.quota_prorated > 0)
     return dict(people=res, ae=ae, acct=acct, shifts=s)
 

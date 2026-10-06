@@ -47,6 +47,12 @@ def main():
     for r in range(12, 92):
         rows.append((sc.cell(row=r, column=1).value, sc.cell(row=r, column=11).value or 0, sc.cell(row=r, column=12).value or 0))
     top_rec = max(rows, key=lambda x: x[2])
+    ctl = wb["Control"]
+    d1 = ctl["F24"].value - ctl["F23"].value
+    band1_cost = sum((sc.cell(row=r, column=6).value or 0) * 0.16 * d1
+                     for r in range(12, 92) if (sc.cell(row=r, column=12).value or 0) > 0)
+    n_band2 = sum(1 for r in range(12, 92)
+                  if (sc.cell(row=r, column=12).value or 0) > 0 and (sc.cell(row=r, column=7).value or 0) > 0)
     top_aw = max(rows, key=lambda x: x[1])
 
     jon_aw, jon_rec = rep("Jon Snow", 10), rep("Jon Snow", 11)
@@ -93,9 +99,10 @@ every other finding combined ({money(top)} vs {money(rest)}). I recommend holdin
 <h2>1. Exceptions ledger — ranked by payout impact</h2>
 <p>"Payout moved" = treated payout vs a naive processing of the same rows. Full ledger with root causes and live record counts: tab Exceptions_Ledger.</p>
 <table><tr><th>#</th><th>Finding</th><th>Records</th><th>Credit $ moved</th><th>Payout moved</th><th>Treatment</th></tr>{led_rows}</table>
-<p><b>Untangling stacked issues.</b> Jon Snow carries E01 and E10 (GTM catch-up): each is sized on its own and they do not interact, because the
-catch-up postings are all on worked-only basis already. Katniss Everdeen (left 12 Jun) has both a leaver split (E04) and a GTM account: her
-GTM credit before 12 Jun is paid to her ({money(katniss, True)} total), the rest rolls to her manager.</p>
+<p><b>Untangling stacked issues.</b> Jon Snow's account carries both E01 and E10 (GTM catch-up). Sized in waterfall order (E01 first),
+E10 counts only his worked pre-June postings ($621 total); sized on the as-written basis it would be $915, so $294 of overlap is counted once,
+under E01. Katniss Everdeen (left 12 Jun) stacks a leaver split (E04) on top of four new accounts: credit recognised through 12 Jun is hers
+({money(katniss, True)}); everything after rolls to her manager, Bruce Wayne, under 7.11.</p>
 
 <h2>2. Assumptions where the plan is silent — and my recommendation</h2>
 <ul>
@@ -115,15 +122,15 @@ GTM credit before 12 Jun is paid to her ({money(katniss, True)} total), the rest
 managers are paid on revenue, not commission, so they do not move.</p>
 <p><b>What surprised me.</b></p>
 <ul>
-<li><b>It is cheap — and that is the point.</b> +{money(delta)} is {delta / base:.2%} of June payout. Only {n_changed} of 28 SMB AEs are above $30k and not ramping; most of the cost sits in band II, so the change mainly rewards the few who are already far over quota (largest: {top_rec[0]}, +{money(top_rec[2])}).</li>
+<li><b>It is cheap, and it mostly pays the near-misses.</b> +{money(delta)} is {delta / base:.2%} of June payout. Only {n_changed} of 28 SMB AEs are above $30k and not ramping, and {money(band1_cost)} of the cost is band I (the $30–40k step), not the 1.5x top band: only {n_band2} reps reach $40k (largest gain: {top_rec[0]}, +{money(top_rec[2])}).</li>
 <li><b>On the plan as written, the biggest winner would be Jon Snow (+{money(top_aw[1])}),</b> whose band II dollars come from unworked GTM postings. Raising the top multiplier raises the payoff to exactly the behaviour E01 describes. Fix the GTM measure before raising accelerators (delta on as-written basis: +{money(delta_aw)}).</li>
-<li><b>Ramping reps are excluded</b> regardless of performance — Scout Finch finished June well over target and gains nothing from either version.</li>
+<li><b>Ramping reps are excluded regardless of performance.</b> Gimli (rehired in May) finished at 120% of quota and gains nothing under either version; the plan's no-accelerator-while-ramping rule matters more than the multiplier.</li>
 </ul>
 
 <h2>4. Slack — the three I would escalate</h2>
 <ol style="margin:2px 0 4px 16px;padding:0">
 <li><b>GTM posting volume (Jon Snow 3, 8 &amp; 15 Jun; Doc Brown 2 Jul; Forrest Gump 3 Jul; Bruce Wayne 6 Jul; Dorothy Gale 7 Jul).</b> Five people describe the same account. It is the largest dollar issue, it recurs every month the template stays open, and only leadership can approve a hold under 7.14.</li>
-<li><b>Katniss Everdeen (1 Jul): "Left on the 12th — will my June commission still process?"</b> A departed employee, real money, high trust stakes. Yes: she is paid for credit recognised through 12 Jun ({money(katniss, True)}); later credit legally rolls to her manager. She needs a clear, written answer before the statement, not after.</li>
+<li><b>Katniss Everdeen (1 Jul): "Left on the 12th — will my June commission still process?"</b> A departed employee, real money, high trust stakes. Yes: she is paid for credit recognised through 12 Jun ({money(katniss, True)}); later credit rolls to her manager under 7.11. She needs a clear, written answer before the statement, not after.</li>
 <li><b>Scout Finch (4 Jul): "122% of target but not accelerator eligible because I'm ramping."</b> Correct under the plan, but her ramp clock rests on an HR record that contradicts itself (role start 1 May, previous role end 31 May), as do Jay Gatsby's and Lord Voldemort's. One HR fix before July removes three disputes.</li>
 </ol>
 <p style="font-size:8.6pt;color:#444">Also real but lower stakes: Legolas (statement credited a deal in Negotiation — evidence the old process counted residue dates), Dr. Watson (SPIFF at ~90%, not "a shade under"), Darth Vader's July $500 offer (not in the plan; needs written approval to be payable).</p>
