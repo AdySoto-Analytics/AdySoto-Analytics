@@ -39,11 +39,11 @@ Status key: ⬜ Not started · 🟨 In discussion · ✅ Agreed
 | Phase | Description | Status |
 |-------|-------------|--------|
 | 2 | Data profiling & quality checks (feeds 3.2 ledger) | ✅ Profiled; A17–A20 to decide |
-| 3 | Commission calculation, all 80 reps (3.1) | 🟨 Excel model built (`deliverables/`); verifying against the Python reference |
-| 4 | Exceptions ledger, sized and treated (3.2) | ⬜ |
-| 5 | Plan-change model: SMB AE accelerator (3.3) | ⬜ |
-| 6 | Slack triage: 3 escalations + one response of ≤250 words (3.4) | ⬜ |
-| 7 | Deliverables: Excel model + PDF summary of 3 pages max (Part 4) | ⬜ |
+| 3 | Commission calculation, all 80 reps (3.1) | ✅ Excel model: 194,307 live formulas, 0 errors, 17/17 checks PASS; ties to the Python reference to the cent |
+| 4 | Exceptions ledger, sized and treated (3.2) | ✅ 10 findings; E01 ($8,081) > all others combined ($5,912) |
+| 5 | Plan-change model: SMB AE accelerator (3.3) | ✅ +$1,377.56 on the recommended basis (+$1,716.45 as written) |
+| 6 | Slack triage: 3 escalations + one response of ≤250 words (3.4) | ✅ GTM templates, Katniss, Scout/HR dates; leadership note of 230 words |
+| 7 | Deliverables: Excel model + PDF summary of 3 pages max (Part 4) | 🟨 Built (`deliverables/`); awaiting Ady's review before submission |
 
 ## Open questions (to verify against later parts)
 
@@ -170,6 +170,7 @@ First-pass June total (plan as written): **$413,713.46** across 80 reps. Not fin
 
 | Date | Decision | Rationale |
 |------|----------|-----------|
+| 2026-10-06 | Rounding: halves round away from zero (Excel ROUND); Python reference aligned | Ebenezer Scrooge's $13,879.945 was the only case |
 | 2026-10-06 | A17–A20 approved as recommended | See ambiguity log |
 | 2026-10-06 | A15–A16 approved; Phase 1 (requirements review) complete | All 8 parts + Appendix reviewed |
 | 2026-10-06 | A14 approved; A13 closed by Appendix (no ownership or manager history exists) | See ambiguity log |

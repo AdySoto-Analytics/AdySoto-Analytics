@@ -10,7 +10,7 @@ import openpyxl
 
 ROOT = Path(__file__).resolve().parent.parent
 MODEL = ROOT / "deliverables" / "June_2026_Commission_Model.xlsx"
-HTML = ROOT / "deliverables" / "June_2026_Commission_Summary.html"
+HTML = ROOT / "scripts" / "summary_source.html"  # intermediate; the PDF is the deliverable
 PDF = ROOT / "deliverables" / "June_2026_Commission_Summary.pdf"
 CHROME = "/opt/pw-browsers/chromium-1194/chrome-linux/chrome"
 
