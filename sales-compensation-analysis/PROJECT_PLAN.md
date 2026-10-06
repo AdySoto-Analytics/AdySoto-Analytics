@@ -38,7 +38,7 @@ Status key: ⬜ Not started · 🟨 In discussion · ✅ Agreed
 
 | Phase | Description | Status |
 |-------|-------------|--------|
-| 2 | Data profiling & quality checks (feeds 3.2 ledger) | 🟨 Waiting for workbook upload |
+| 2 | Data profiling & quality checks (feeds 3.2 ledger) | ✅ Profiled; A17–A20 to decide |
 | 3 | Commission calculation, all 80 reps (3.1) | ⬜ |
 | 4 | Exceptions ledger, sized and treated (3.2) | ⬜ |
 | 5 | Plan-change model: SMB AE accelerator (3.3) | ⬜ |
@@ -83,6 +83,10 @@ If it stays unclear, it moves to the ambiguity log with a recommended treatment.
 | A14 | Part 2, 7.14 | June statements have already been paid. When our recalculation differs, how is the difference settled? The plan is silent. | (a) Underpayments: pay on the July statement or off-cycle. (b) Overpayments: deduct automatically from July. (c) Overpayments: hold for a written leadership decision. | **(a) + (c)**: pay underpayments promptly (off-cycle if material). Overpayments go to sales leadership for a written decision (recover, spread, or forgive), never deducted automatically, consistent with 7.14. State this in the PDF. | ✅ Approved as recommended (2026-10-06) | Decided |
 | A15 | A-9, 7.4 | `account_first_worked_shift_date` is given and we must not infer it. What if it conflicts with the data (different values on rows of the same account, or a worked shift in the extract dated before it)? | (a) Use the field as given; if an account has several values, use the earliest. (b) Override it with the observed first worked shift. | **(a)**: the dictionary explicitly says not to infer it. Each conflict goes in the ledger with the $ it would move under (b). | ✅ Approved as recommended (2026-10-06) | Decided |
 | A16 | A-1, A-2 | The Sales Roster (tab 1) and the HR Export (tab 2) may disagree on role, manager, dates or status. | (a) HR governs role, dates and Manager-ID; the roster defines the 80 in scope and the CRM id. (b) The roster governs. | **(a)**: A-2 says Current Role 'decides which plan the rep is paid on', and the roster 'is not guaranteed to agree with HR'. Ledger every disagreement with its $ effect. | ✅ Approved as recommended (2026-10-06) | Decided |
+| A17 | 7.6 vs tab 8 | The plan says an *Applied Science shift tag* flips an account to GTM, but tab 9 has no tag column; tab 8 carries `account_type` = GTM (47 opportunities, 40 accounts). | (a) Treat `account_type` = GTM as the tag's result. (b) Treat no account as GTM (no tag data). | **(a)**: Slack (Bruce Wayne, 6 Jul) confirms the tag flips the account automatically, and `account_type` is consistent across each account's opportunities. | Pending | Proposed |
+| A18 | 7.6, 7.14, 3.2 | Jon Snow's GTM account b2b39ae1: the plan as written credits $219,100 of GSV, mostly from shift templates loaded by the AE, not the facility. | (a) Pay as written. (b) Recommended layer: credit GSV of worked shifts only ($31,500) and hold the rest pending investigation. (c) Hold all GTM credit on the account. | **(b)**: worked shifts are unambiguously genuine; the rest is held, not forfeited, until ops and leadership confirm who posted them. Show plan-as-written vs recommended side by side (A1). | Pending | Proposed |
+| A19 | A-2 | HR rows where Current Role Start Date is earlier than Previous Role End Date (Jay 1 May vs 7 Jun; Scout 1 May vs 31 May; Voldemort 1 May vs 21 Jun). Slack supports the later dates for Jay (8 Jun) and Voldemort (22 Jun). | (a) Use Current Role Start Date (A-2: it starts the ramp clock). (b) Use the day after Previous Role End. | **(a)**, because the dictionary names that field, and we verified it moves **$0** in June for all three. Ledger as an HR correction to make before July. | Pending | Proposed |
+| A20 | A-2 vs Slack | Walter White: HR shows employed since 2021; on 12 Jul he says he started "two weeks ago". | (a) HR governs, no change. (b) Treat as a new hire. | **(a)** per A16; ledger it and ask HR to confirm before July. | Pending | Proposed |
 
 ## Proposed model structure (Part 4)
 
@@ -130,36 +134,37 @@ If it stays unclear, it moves to the ambiguity log with a recommended treatment.
 | P7 | Window credits wait until the window closes | Pay lags performance by up to 2 months; harder to explain to reps |
 | P8 | Closer keeps credit after leaving ownership | Clear and fair to hunters, but the AE and AM can be credited simultaneously (P1) |
 
-## Data inventory (from Appendix A — confirm when the workbook arrives)
+## Data inventory (profiled 2026-10-06 — original file SHA-256 7f354f9c…81fc)
 
-| Tab | Rows | Contents | Used for | Watch |
-|-----|------|----------|----------|-------|
-| 1. Sales Roster | 80 | Reps in scope; unique names; `crm_owner_id` | Population for 3.1; links reps to CRM | Disagreements with HR (A16) |
-| 2. HR Export | 1,080 | Role, employment dates (inclusive), role dates, Manager-ID, Country Code | Plan role, quota proration, ramp clock, roll-up chain, payout currency | Join key to roster (W11); chain gaps/loops |
-| 3. Exchange Rates | 196 | Local units per 1 USD | USD → local payout | Country → currency mapping (W12) |
-| 4. Ramp Terms | 17 roles | Start Date Ramp (cols B–D); New Report Ramp (E–G) not used by any role | Ramp floor | Months in B–D vs plan's 2 defined months (W13) |
-| 5. Compensation | 17 roles | Headcount, # of Reports, quota, rates; Metric II for AMs and the Head | Rates, quotas, manager quotas | Headcount vs roster/HR (W14) |
-| 6. Accelerators | — | AE bands and multipliers; AM retention SPIFF | Bands, SPIFF; 3.3 scenario | — |
-| 7. Opportunity to ID Mapping | 761 | CRM ↔ app ↔ billing ids | Joins shifts and credits to accounts | 761 vs 815 opps; duplicates and gaps (W15) |
-| 8. Opportunity Export | 815 | Stage, closed_won_date, effective_start_date, closed_by (AE), crm_owner (AM), rates, terms, segment | Go-live, AE/AM attribution, net terms | W2–W5; segment is informational only |
-| 9. App Export | 107,052 | Posted shifts; `worked_shift`; `shift_worked_date`; `account_first_worked_shift_date`; Applied Science tag | NR, GSV, windows, GTM | Extract window Mar–Jun (W16); flag/date consistency (W17); A15 |
-| 10. Billing Export | 1,089 | Credit tickets (USD), status, billing_month, ticket_type | Existing NR deductions; SPIFF May/June | Statuses other than approved/denied (W18) |
-| 11. Slack Scrape | — | Messages from June to mid-July | 3.4 | Only evidence of what was actually paid |
+| Tab | Rows (Appendix → actual) | Used for | Profiling result |
+|-----|--------------------------|----------|------------------|
+| 1. Sales Roster | 80 → 80 | Population; `hr_id` → HR, `crm_owner_id` → CRM, `slack_user_id` → Slack | Clean: all 80 join to HR on `hr_id` (W11 resolved: a real id key exists, not names) |
+| 2. HR Export | 1,080 → 1,080 | Role, employment dates, role start, Manager-ID, country | Reporting chain matches tab 5 exactly. Leavers: Severus Snape (29 May), Katniss Everdeen (12 Jun). Ramping: Frodo, Gimli (rehire), Ron, Tom (AE); Scout, Jay (ENT promotion); Anna, Percy (AM). **3 records where the role start is before the previous role's end** (Jay, Scout, Voldemort) → A19 |
+| 3. Exchange Rates | 196 → 196 | Payout currency | Reps sit in US, CA (1.40), MX (20.0), PR (1.00, USD). Namibia's code "NA" reads as blank in some tools (not used by any rep) |
+| 4. Ramp Terms | 17 → 17 | Ramp floor | W13 resolved: only 2 months. AE 100% then 50%; AM 100% then 100% |
+| 5. Compensation | 17 → 17 | Rates, quotas | Headcounts and # of Reports match the HR chain exactly (W14 resolved) |
+| 6. Accelerators | → | Bands, SPIFF | SMB 30k/40k ×1.2/×1.3; ENT 60k/80k ×1.2/×1.3; SPIFF SMB $500, ENT $1,500 |
+| 7. ID Mapping | 761 → 761 | Joins | **Clean 1:1:1** for 761 accounts; every shift and credit maps (W15 cleared) |
+| 8. Opportunity Export | 815 → 815 | Go-live, attribution, rates, terms | Account properties identical across opportunities (W3 clean). 52 accounts have 2+ opportunities, **25 with a later Closed Won expansion/renewal dated May–June**. 12 non-won rows carry a `closed_won_date` (W2). 2 blank closers (both June go-lives). GTM is marked by `account_type`, not a shift tag → A17 |
+| 9. App Export | 107,052 → 107,052 | NR, GSV, windows | No duplicate ids; worked flag and dates consistent; first-shift date consistent and never contradicted (A15 not triggered). 4 accounts have no shifts at all |
+| 10. Billing Export | 1,089 → 1,089 | Existing credits; SPIFF | 835 approved / 254 denied; May and June only; each credit ≤ the shift's margin; no duplicates |
+| 11. Slack Scrape | → 59 | 3.4 | 17 noise; ~30 comp questions; several corroborate data findings |
 
-**Join path:** shift (app id) → tab 7 → account / opportunities (tab 8) → `closed_by_owner_id` / `crm_owner_id` → tab 1 roster → tab 2 HR (role, manager, country) → tab 3 FX. Credits follow the same path via billing id.
+## Phase 2 — preliminary findings (first-pass sizing, reference calc in `scripts/`)
 
-### Watch list additions from Appendix A
+First-pass June total (plan as written): **$413,713.46** across 80 reps. Not final until A17–A20 are decided and the Excel model ties to it.
 
-| ID | What to check | Why it matters |
-|----|---------------|----------------|
-| W11 | The key that joins the roster to HR (an id, or name only?) | A bad join silently mis-assigns role, manager or currency |
-| W12 | How Country Code maps to a tab 3 rate (shared currencies, missing countries) | Wrong local payout |
-| W13 | Whether tab 4 has a 3rd ramp month although 7.10 defines only months 1–2 | Possible plan/tab conflict |
-| W14 | Tab 5 headcount and # of Reports vs the actual roster and HR chain | Manager quota is taken from tab 5, not from actual team size |
-| W15 | Tab 7: ids mapped to more than one account, unmapped ids, many opportunities per account | **Duplicate mapping multiplies revenue**; strong "biggest finding" candidate alongside W6 |
-| W16 | Unworked posted shifts outside Mar–Jun, and GTM postings before 1 March | GSV for F1-30D may be incomplete; data limitation to ledger |
-| W17 | `worked_shift` TRUE without a date, FALSE with a date; first-shift date inconsistent within an account | Revenue on or off by mistake; A15 |
-| W18 | Credit statuses other than approved/denied (e.g. pending); billing_month outside May–June | Only approved credits count; May credits matter for the SPIFF |
+| # | Finding | Records | First-pass $ size | Status |
+|---|---------|---------|-------------------|--------|
+| 1 | **GTM posting inflation:** Jon Snow's rural GTM account b2b39ae1 posted 313 shifts (293 in June), only 45 worked (14% fill vs ~78% norm). The plan pays on GSV posted → $219,100 GSV, $41,081 credited. Slack: Jon "loading shift templates" for rural sites; the facility's DON says they post "a handful a day"; ops flagged an open template. | 313 shifts, 1 account, 4 reps (Jon + roll-ups) | **$7,613** over plan-as-NR; on worked-shift GSV only, credited falls to $5,906 | A18 |
+| 2 | Expansion/renewal Closed Won dated May–June on old accounts: if go-live is read from the latest opportunity, these accounts stop being "Existing" | 25 accounts, 26 reps | $3,321 | Treated per 7.3 (earliest Closed Won) |
+| 3 | Leavers: Severus (left 29 May), Katniss (left 12 Jun); hires mid-June: Tom, Ron. Credit after leaving / before joining → manager | ~10 accounts | ~$17k credit moved to managers | Treated per 7.11 |
+| 4 | Blank closer on 2 June go-lives | 2 opportunities | $1,432 credit unassigned | Treated per 7.4 |
+| 5 | Residue `closed_won_date` on Negotiation / Closed Lost | 12 rows | $0 in June (no go-live changes) | Treated per 7.3 |
+| 6 | Denied credits | 254 tickets | to size | Treated per 7.2 |
+| 7 | HR role-date overlaps (Jay, Scout, Voldemort) | 3 HR rows | $0 June impact (verified) | A19 |
+| 8 | Walter White: HR start 2021, Slack says he started 2 weeks ago | 1 HR row | to size | A20 |
+| 9 | GTM postings made before the first worked shift, in a closed month (A9 catch-up) | 2 accounts | $915 | Decided A9 |
 
 ## Decision log
 
